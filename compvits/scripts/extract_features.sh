@@ -7,9 +7,15 @@ K=$3
 echo extract_features: M$M $model K$K
 dir="logs/extract_features/M${M}/${model}/K$K"
 
+if [[ $model == "deitb" ]]; then
+    trunk_cfg=deitb
+else
+    trunk_cfg=vitb
+fi
+
 python tools/run_distributed_engines.py \
     config=compvits/base \
-    +config/compvits/model/trunk=${model} \
+    +config/compvits/model/trunk=$trunk_cfg \
     +config/compvits/data/test=in1k \
     engine_name=extract_features \
     config.TEST_ONLY=True \
