@@ -3,7 +3,7 @@
 model=$1
 echo train_linear: $model
 
-dir="debug/train_linear/${model}"
+dir="logs/train_linear/${model}"
 
 if [[ $model == "deitb" ]]; then
     head_cfg=mlp_768_1000
