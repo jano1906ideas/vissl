@@ -1,0 +1,11 @@
+# @package _global_
+config:
+  MODEL:
+    FEATURE_EVAL_SETTINGS:
+      EXTRACT_TRUNK_FEATURES_ONLY: False
+      SHOULD_FLATTEN_FEATS: False
+    HEAD:
+      PARAMS: [
+        ["mlp", {"dims" : [768, 1000]}],
+        ["eval_mlp", {"in_channels": 384, "dims": [768, 1000]}],
+      ]

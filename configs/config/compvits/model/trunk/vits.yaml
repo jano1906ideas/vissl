@@ -10,17 +10,15 @@ config:
         ["lastCLS", ["Identity", []] ],
       ]
     HEAD:
-      PARAMS: [
-        ["mlp", {"dims" : [768, 1000]}]
-      ]
-    TRUNK:
+      PARAMS: []
+    TRUNK: # S-16
       NAME: vision_transformer
       VISION_TRANSFORMERS:
         COMPVITS:
           # - '': Disable representation composition
           # - 'afterK': compose representations after processing K blocks
           COMP:
-            NAME: "afterK"
+            NAME: ""
             # Parameters provided to the Masked Generator
             PARAMS: {"K": None}
           SPLIT:
@@ -30,14 +28,12 @@ config:
             PARAMS: {"M": None}
         IMAGE_SIZE: 224
         PATCH_SIZE: 16
-        HIDDEN_DIM: 768
+        HIDDEN_DIM: 384
         NUM_LAYERS: 12
-        NUM_HEADS: 12
-        MLP_DIM: 3072
+        NUM_HEADS: 6
+        MLP_DIM: 1536
         CLASSIFIER: token
         DROPOUT_RATE: 0
         ATTENTION_DROPOUT_RATE: 0
         QKV_BIAS: True
         DROP_PATH_RATE: 0.1
-        POS_EMBED_CLASS_TOKEN: False
-        BLOCK_NAME: Layer_scale_init_Block

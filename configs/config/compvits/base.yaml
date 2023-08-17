@@ -1,0 +1,4 @@
+# @package _global_
+config:
+  DISTRIBUTED:
+    NUM_PROC_PER_NODE: 1

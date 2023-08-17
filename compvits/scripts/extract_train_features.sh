@@ -1,23 +1,17 @@
 #!/bin/bash
 
 model=$1
-echo train_linear: $model
 
-dir="logs/train_linear/${model}"
+echo extract_train_features: $model
 
-if [[ $model == "deitb" ]]; then
-    head_cfg=mlp_768_1000
-else
-    head_cfg=mlp_emlp_768_1000
-fi
+dir="logs/nearest_neighbor/train_features/${model}"
 
 python tools/run_distributed_engines.py \
     config=compvits/base \
     +config/compvits/model/trunk=${model} \
-    +config/compvits/model/head=$head_cfg \
     +config/compvits/data/train=in1k \
-    +config/compvits/data/test=in1k \
-    +config/compvits/task=train_linear \
+    engine_name=extract_features \
     config.CHECKPOINT.DIR=$dir \
+    config.TEST_MODEL=False \
     config.MODEL.WEIGHTS_INIT.PARAMS_FILE=/home/jan.olszewski/git/vissl/checkpoints/${model}.pth \
     config.MODEL.WEIGHTS_INIT.STATE_DICT_KEY_NAME=model \

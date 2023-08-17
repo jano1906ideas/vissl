@@ -16,6 +16,8 @@ def gather_data():
                 head, tail = os.path.split(head)
                 split.append(tail)
             K, model, cm, task = split
+            if not cm.startswith("M"):
+                continue
             if task == "extract_features":
                 if cm not in extract_features:
                     extract_features[cm] = {}

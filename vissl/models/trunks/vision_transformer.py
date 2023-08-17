@@ -641,7 +641,6 @@ class VisionTransformer(nn.Module):
                 xs.append(x[:, mask[0,:]].reshape(x.shape[0], -1, x.shape[-1]))
             else:
                 xs.append(x[mask].reshape(x.shape[0], -1, x.shape[-1]))
-        
         return xs
         
     def comp_forward_afterK(self, x, out_feat_keys, K, **kwargs):
@@ -654,10 +653,10 @@ class VisionTransformer(nn.Module):
         n_blk_save = max([n for name, n in out_feats if name == "BLK"] + [0])
         n_cls_save = max([n for name, n in out_feats if name == "CLS"] + [0])
 
-        after_ith_block_save_blk = len(self.blocks) - n_blk_save
-        after_ith_block_save_cls = len(self.blocks) - n_cls_save
-        after_ith_block_save = min(after_ith_block_save_blk, after_ith_block_save_cls)
-        assert(after_ith_block_save >= K)
+        after_i_blocks_save_blk = len(self.blocks) - n_blk_save + 1
+        after_i_blocks_save_cls = len(self.blocks) - n_cls_save + 1
+        after_i_blocks_save = min(after_i_blocks_save_blk, after_i_blocks_save_cls)
+        assert(after_i_blocks_save >= K)
 
         #run separately
         subencoder = nn.Sequential(*self.blocks[:K])
@@ -670,17 +669,26 @@ class VisionTransformer(nn.Module):
             x = torch.cat([xs_cls.mean(dim=0)] + xs_feats, dim=1)
         else:
             x = torch.cat(xs_feats, dim=1)
-        for blk in self.blocks[K:after_ith_block_save]:
+        for blk in self.blocks[K:after_i_blocks_save]:
             x = blk(x)
         
         #extract
         blk_feats = []
         cls_feats = []
-        for i, blk in enumerate(self.blocks[after_ith_block_save:]):
+
+        if after_i_blocks_save >= after_i_blocks_save_blk:
+            blk_feats.append(self.norm(x))
+        if after_i_blocks_save >= after_i_blocks_save_cls:
+            if self.use_class_token:
+                cls_feats.append(self.norm(x[:, 0, :]))
+            else:
+                cls_feats.append(self.avg_pool(self.norm(x)))
+
+        for i, blk in enumerate(self.blocks[after_i_blocks_save:]):
             x = blk(x)
-            if i+after_ith_block_save >= after_ith_block_save_blk:
+            if i+after_i_blocks_save >= after_i_blocks_save_blk:
                 blk_feats.append(self.norm(x))
-            if i+after_ith_block_save >= after_ith_block_save_cls:
+            if i+after_i_blocks_save >= after_i_blocks_save_cls:
                 if self.use_class_token:
                     cls_feats.append(self.norm(x[:, 0, :]))
                 else:
@@ -691,13 +699,12 @@ class VisionTransformer(nn.Module):
                 torch.cat(cls_feats[-n:], dim=-1) if feat == "CLS" else torch.cat(blk_feats[-n:], dim=-1)
                 for feat, n in out_feats
             ]
-            return output
         else:
             if self.use_class_token:
-                return x[:, 0, :]
+                output = x[:, 0, :]
             else:
-                return self.avg_pool(x)
-
+                output = self.avg_pool(x)
+        return output
 
     def forward(
         self, x: torch.Tensor, out_feat_keys: List[str] = None, **kwargs
