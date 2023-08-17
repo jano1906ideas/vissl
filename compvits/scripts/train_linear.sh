@@ -21,5 +21,5 @@ python tools/run_distributed_engines.py \
     +config/compvits/data/test=in1k \
     +config/compvits/task=train_linear \
     config.CHECKPOINT.DIR=$dir \
-    config.MODEL.WEIGHTS_INIT.PARAMS_FILE=/home/jan.olszewski/git/vissl/checkpoints/${model}.pth \
+    config.MODEL.WEIGHTS_INIT.PARAMS_FILE=/home/jan.olszewski/git/vissl/checkpoints/trunk_only/${model}.pth \
     config.MODEL.WEIGHTS_INIT.STATE_DICT_KEY_NAME=model \
