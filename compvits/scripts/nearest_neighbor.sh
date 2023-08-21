@@ -17,7 +17,7 @@ fi
 
 mkdir --parents $dir
 mv ${feats_all}/rank0_chunk0_train*.npy ${dir}
-cp ${feats_K}/rank0_chunk0_test*.npy ${dir}
+mv ${feats_K}/rank0_chunk0_test*.npy ${dir}
 
 python tools/nearest_neighbor_test.py \
     config=compvits/base \
@@ -28,3 +28,4 @@ python tools/nearest_neighbor_test.py \
     config.NEAREST_NEIGHBOR.FEATURES.PATH=$dir \
     
 mv ${dir}/rank0_chunk0_train*.npy ${feats_all}
+mv ${dir}/rank0_chunk0_test*.npy ${feats_K}
