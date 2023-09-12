@@ -214,7 +214,9 @@ def validate_network(val_loader, model, linear_classifier, n, avgpool):
                     output = torch.cat((output.unsqueeze(-1), torch.mean(intermediate_output[-1][:, 1:], dim=1).unsqueeze(-1)), dim=-1)
                     output = output.reshape(output.shape[0], -1)
             else:
-                output = model(inp)
+                K = 0
+                M = random.choice([2, 3, 4, 6, 8, 9, 12, 16])
+                output = model(inp, K, M)
         output = linear_classifier(output)
         loss = nn.CrossEntropyLoss()(output, target)
 
