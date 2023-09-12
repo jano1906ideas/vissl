@@ -6,7 +6,7 @@ config:
     NUM_NODES: 1
     # set this to the number of gpus per machine. This ensures that each gpu of the
     # node has a process attached to it.
-    NUM_PROC_PER_NODE: 1
+    NUM_PROC_PER_NODE: 4
   # ----------------------------------------------------------------------------------- #
   # DISTRIBUTED TRAINING ON SLURM: Additional options for SLURM node allocation
   # (options like number of nodes and number of GPUs by node are taken from DISTRIBUTED)
@@ -38,9 +38,9 @@ config:
     ADDITIONAL_PARAMETERS: {}
   DATA:
     # Common data options
-    NUM_DATALOADER_WORKERS: 8 # Set this depending on the number of CPUs you have
+    NUM_DATALOADER_WORKERS: 32 # Set this depending on the number of CPUs you have
     TRAIN:
       # number of unique samples in minibatch per gpu (or per device)
-      BATCHSIZE_PER_REPLICA: 32
+      BATCHSIZE_PER_REPLICA: 128
     TEST:
-      BATCHSIZE_PER_REPLICA: 32
+      BATCHSIZE_PER_REPLICA: 128
