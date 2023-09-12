@@ -38,9 +38,9 @@ config:
     ADDITIONAL_PARAMETERS: {}
   DATA:
     # Common data options
-    NUM_DATALOADER_WORKERS: 32 # Set this depending on the number of CPUs you have
+    NUM_DATALOADER_WORKERS: 5 # Set this depending on the number of CPUs you have
     TRAIN:
       # number of unique samples in minibatch per gpu (or per device)
-      BATCHSIZE_PER_REPLICA: 128
+      BATCHSIZE_PER_REPLICA: 32
     TEST:
-      BATCHSIZE_PER_REPLICA: 128
+      BATCHSIZE_PER_REPLICA: 32
