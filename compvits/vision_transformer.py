@@ -157,7 +157,7 @@ class VisionTransformer(nn.Module):
             for i in range(depth)])
         self.norm = norm_layer(embed_dim)
 
-        self.use_class_token = True
+        self.use_class_token = False
 
         # Classifier head
         self.head = nn.Linear(embed_dim, num_classes) if num_classes > 0 else nn.Identity()
