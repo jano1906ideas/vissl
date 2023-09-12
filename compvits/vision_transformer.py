@@ -304,8 +304,6 @@ class VisionTransformer(nn.Module):
 
     def forward(self, x, K, M):
         output = self.comp_forward_afterK(x, ['lastCLS'], K, M)
-        for i in output:
-            print(i.shape)
         return output[0]
 
     def get_last_selfattention(self, x):
