@@ -202,10 +202,8 @@ class VisionTransformer(nn.Module):
 
         x = self.prepare_tokens(x)
         xs = self.split_input(x, M)
-        print([k for k in out_feat_keys])
         out_feats = [("BLK" if "BLK" in k else "CLS", int(k[len("concat___"):]) if "concat" in k else 1) for k in
                      out_feat_keys]
-        print(out_feats)
         n_blk_save = max([n for name, n in out_feats if name == "BLK"] + [0])
         n_cls_save = max([n for name, n in out_feats if name == "CLS"] + [0])
 
@@ -255,6 +253,8 @@ class VisionTransformer(nn.Module):
                 torch.cat(cls_feats[-n:], dim=-1) if feat == "CLS" else torch.cat(blk_feats[-n:], dim=-1)
                 for feat, n in out_feats
             ]
+            print('!!!')
+            print(len(output))
         else:
             if self.use_class_token:
                 output = x[:, 0, :]
