@@ -14,6 +14,7 @@
 import os
 import argparse
 import json
+import random
 import sys
 from pathlib import Path
 
@@ -169,7 +170,9 @@ def train(model, linear_classifier, optimizer, loader, epoch, n, avgpool):
                 output = torch.cat((output.unsqueeze(-1), torch.mean(intermediate_output[-1][:, 1:], dim=1).unsqueeze(-1)), dim=-1)
                 output = output.reshape(output.shape[0], -1)
             else:
-                output = model(inp)
+                K = random.randint(0, 12)
+                M = random.choice([2, 4, 8, 16, 3, 6, 9, 12])
+                output = model(inp, K, M)
         output = linear_classifier(output)
 
         # compute cross entropy loss

@@ -302,9 +302,7 @@ class VisionTransformer(nn.Module):
     #    x = self.norm(x)
     #    return x[:, 0]
 
-    def forward(self, x):
-        K = random.randint(0, len(self.blocks))
-        M = random.choice([2, 4, 8, 16, 3, 6, 9, 12])
+    def forward(self, x, K, M):
         output = self.comp_forward_afterK(x, 'lastCLS', K, M)
         return output
 
