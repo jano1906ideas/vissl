@@ -253,8 +253,6 @@ class VisionTransformer(nn.Module):
                 torch.cat(cls_feats[-n:], dim=-1) if feat == "CLS" else torch.cat(blk_feats[-n:], dim=-1)
                 for feat, n in out_feats
             ]
-            print('!!!')
-            print(len(output))
         else:
             if self.use_class_token:
                 output = x[:, 0, :]
@@ -308,7 +306,7 @@ class VisionTransformer(nn.Module):
         output = self.comp_forward_afterK(x, ['lastCLS'], K, M)
         for i in output:
             print(i.shape)
-        return output
+        return output[0]
 
     def get_last_selfattention(self, x):
         x = self.prepare_tokens(x)
