@@ -171,7 +171,7 @@ def train(model, linear_classifier, optimizer, loader, epoch, n, avgpool):
                 output = output.reshape(output.shape[0], -1)
             else:
                 K = random.randint(0, 12)
-                M = random.choice([2, 4, 8, 16, 3, 6, 9, 12])
+                M = random.choice([2, 3, 4, 6, 8, 9, 12, 16])
                 output = model(inp, K, M)
         output = linear_classifier(output)
 
