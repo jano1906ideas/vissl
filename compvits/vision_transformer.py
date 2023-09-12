@@ -204,8 +204,6 @@ class VisionTransformer(nn.Module):
         xs = self.split_input(x, M)
         out_feats = [("BLK" if "BLK" in k else "CLS", int(k[len("concat___"):]) if "concat" in k else 1) for k in
                      out_feat_keys]
-        print('!!!')
-        print(out_feats)
         n_blk_save = max([n for name, n in out_feats if name == "BLK"] + [0])
         n_cls_save = max([n for name, n in out_feats if name == "CLS"] + [0])
 
@@ -305,7 +303,7 @@ class VisionTransformer(nn.Module):
     #    return x[:, 0]
 
     def forward(self, x, K, M):
-        output = self.comp_forward_afterK(x, 'lastCLS', K, M)
+        output = self.comp_forward_afterK(x, ['lastCLS'], K, M)
         for i in output:
             print(i.shape)
         return output
