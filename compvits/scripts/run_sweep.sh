@@ -14,7 +14,7 @@
 
 source compvits/scripts/extract_train_features.sh
 
-scripts=(compvits/scripts/test_linear.sh compvits/scripts/extract_features.sh compvits/scripts/nearest_neighbor.sh)
+scripts=(compvits/scripts/nearest_neighbor.sh)
 models=(deitb)
 Ms=(2 3 4 6 8 9 12 16)
 for script in ${scripts[@]}; do
