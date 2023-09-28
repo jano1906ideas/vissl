@@ -1,11 +1,12 @@
 import torch
 from collections import OrderedDict
 import sys
+import os
 
-
-def download_and_save_deit3():
-    checkpoint = torch.hub.load_state_dict_from_url("https://dl.fbaipublicfiles.com/deit/deit_3_base_224_1k.pth",
+def download_and_save_deit3(link, size):
+    checkpoint = torch.hub.load_state_dict_from_url(link,
                                                     map_location='cpu', check_hash=True)
+    
     new_checkpoint = []
     for k in checkpoint["model"]:
         if not k.startswith("head."):
@@ -19,13 +20,14 @@ def download_and_save_deit3():
 
     print(new_checkpoint.keys())
     save = {"model": new_checkpoint}
-    torch.save(save, "checkpoints/deitb.pth")
+    torch.save(save, f"checkpoints/{size}/deit.pth")
 
 
-def download_and_save_ibot():
+def download_and_save_ibot(link, size):
     checkpoint = torch.hub.load_state_dict_from_url(
-        "https://lf3-nlp-opensource.bytetos.com/obj/nlp-opensource/archive/2022/ibot/vitb_16/checkpoint_teacher.pth",
+        link,
         map_location='cpu', check_hash=True)
+    
     new_checkpoint = []
     for k in checkpoint["state_dict"]:
         new_k = "trunk." + k
@@ -36,12 +38,12 @@ def download_and_save_ibot():
     new_checkpoint.keys()
 
     save = {"model": new_checkpoint}
-    torch.save(save, "checkpoints/trunk_only/ibotb.pth")
+    torch.save(save, f"checkpoints/trunk_only/{size}/ibot.pth")
 
 
-def download_and_save_dino():
+def download_and_save_dino(link, size):
     checkpoint = torch.hub.load_state_dict_from_url(
-        'https://dl.fbaipublicfiles.com/dino/dino_vitbase16_pretrain/dino_vitbase16_pretrain.pth', map_location='cpu',
+        link, map_location='cpu',
         check_hash=True)
 
     new_checkpoint = []
@@ -56,12 +58,12 @@ def download_and_save_dino():
     print(new_checkpoint.keys())
 
     save = {"model": new_checkpoint}
-    torch.save(save, "checkpoints/trunk_only/dino.pth")
+    torch.save(save, f"checkpoints/trunk_only/{size}/dino.pth")
 
 
-def download_and_save_moco3():
+def download_and_save_moco3(link, size):
     checkpoint = torch.hub.load_state_dict_from_url(
-        'https://dl.fbaipublicfiles.com/moco-v3/vit-b-300ep/vit-b-300ep.pth.tar', map_location='cpu',
+        link, map_location='cpu',
         check_hash=True)
 
     new_checkpoint = []
@@ -76,7 +78,7 @@ def download_and_save_moco3():
     print(new_checkpoint.keys())
 
     save = {"model": new_checkpoint}
-    torch.save(save, "checkpoints/trunk_only/moco3.pth")
+    torch.save(save, f"checkpoints/trunk_only/{size}/moco3.pth")
 
 
 models_funs = {
@@ -86,18 +88,28 @@ models_funs = {
     "moco3": download_and_save_moco3
 }
 
+models_sizes_links = {
+    "deit3": {"small": "https://dl.fbaipublicfiles.com/deit/deit_3_small_224_1k.pth", "base": "https://dl.fbaipublicfiles.com/deit/deit_3_base_224_1k.pth"},
+    "ibot": {"small": "https://lf3-nlp-opensource.bytetos.com/obj/nlp-opensource/archive/2022/ibot/vits_16/checkpoint_teacher.pth", "base": "https://lf3-nlp-opensource.bytetos.com/obj/nlp-opensource/archive/2022/ibot/vitb_16/checkpoint_teacher.pth"},
+    "dino": {"small": "https://dl.fbaipublicfiles.com/dino/dino_deitsmall16_pretrain/dino_deitsmall16_pretrain.pth", "base": "https://dl.fbaipublicfiles.com/dino/dino_vitbase16_pretrain/dino_vitbase16_pretrain.pth"},
+    "moco3": {"small": "https://dl.fbaipublicfiles.com/moco-v3/vit-s-300ep/vit-s-300ep.pth.tar", "base": "https://dl.fbaipublicfiles.com/moco-v3/vit-b-300ep/vit-b-300ep.pth.tar"},
+}
 
-def main(model):
+
+def main(model, size):
     # Your code here
-    print("Downloading and saving:", model)
-
-    models_funs[model]()
+    print("Downloading and saving:", model, size)
+    link = models_sizes_links[model][size]
+    models_funs[model](link, size)
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python script.py <model>")
+    if len(sys.argv) != 3:
+        print("Usage: python script.py <model> <size>")
         sys.exit(1)
 
-    input_string = sys.argv[1]
-    main(input_string)
+    model = sys.argv[1]
+    size = sys.argv[2]
+    os.makedirs(os.path.join("checkpoints", size), exist_ok=True)
+    os.makedirs(os.path.join("checkpoints", "trunk_only", size), exist_ok=True)
+    main(model, size)

@@ -101,7 +101,8 @@ configs/config/config_local/*
 train_config.yaml
 
 #compvits ignore
-checkpoints
+checkpoints/*
+!checkpoints/heads
 compvits/plots/data
 logs
 debug*
