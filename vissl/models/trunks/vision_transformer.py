@@ -40,7 +40,7 @@ from vissl.models.model_helpers import DropPath, to_2tuple, trunc_normal_
 from vissl.models.trunks import register_model_trunk
 from vissl.utils.fsdp_utils import fsdp_wrapper
 from vissl.utils.misc import set_torch_seed
-from compvits.constants import DIVISION_MASKS_14_14
+from compvits.constants import DIVISION_MASKS
 import random
 
 class Mlp(nn.Module):
@@ -347,7 +347,7 @@ class VisionTransformer(nn.Module):
         self.split_name = self.split_config.NAME
         self.split_params = self.split_config.PARAMS
         if self.split_name == "precomputed_masks":
-            self.precomputed_masks = DIVISION_MASKS_14_14[self.split_params["M"]]
+            self.precomputed_masks = DIVISION_MASKS[14][self.split_params["M"]]
         else:
             self.precomputed_masks = None
 

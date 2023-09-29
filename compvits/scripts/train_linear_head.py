@@ -58,9 +58,6 @@ class LinearClassifier(nn.Module):
         self.linear.bias.data.zero_()
 
     def forward(self, x):
-        # flatten
-        x = x.view(x.size(0), -1)
-
         # linear layer
         return self.linear(x)
 
