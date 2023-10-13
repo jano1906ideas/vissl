@@ -37,7 +37,6 @@ var/
 *.egg
 .hydra/
 tb_logs/
-metrics.json
 stdout.json
 
 # PyInstaller

@@ -1,0 +1,1 @@
+{"iteration": 0, "phase_idx": 0, "test_accuracy_list_meter": {"top_1": {"cls1_mlp": 65.44}, "top_5": {"cls1_mlp": 85.97399999999999}}, "train_phase_idx": -1}
